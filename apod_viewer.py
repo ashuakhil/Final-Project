@@ -43,18 +43,18 @@ root.deiconify()  # Not sure if this is necessary
 #####################
 # Create the frame to hold the image
 frm_image = ttk.Frame(root)
-frm_image.columnconfigure(# Complete this portion)
-frm_image.rowconfigure(# Complete this portion)
-frm_image.grid(row=0, columnspan=2, # Complete this portion, # Complete this portion, sticky=NSEW)
+frm_image.columnconfigure(0, weight=1)
+frm_image.rowconfigure(0, weight=1)
+frm_image.grid(row=0, columnspan=2, sticky=NSEW)
 
 # Create the frame to hold the image explanation
 frm_explanation = ttk.Frame(root)
-frm_explanation.columnconfigure(# Complete this portion)
-frm_explanation.rowconfigure(# Complete this portion)
+frm_explanation.columnconfigure(0, weight=1)
+frm_explanation.rowconfigure(0, weight=1)
 frm_explanation.grid(row=1, columnspan=2, padx=10, sticky=NSEW)
 
 # Create the frame to hold the image select widgets
-lblfrm_select = # Complete this portion
+lblfrm_select = ttk.LabelFrame(root, text="Select Image")
 lblfrm_select.grid(row=2, column=0, padx=(10,5), pady=10, sticky=NSEW)
 
 # Create the frame to hold the image download widgets
@@ -135,7 +135,7 @@ btn_download_image = ttk.Button(lblfrm_download, text=txt_download_image, width=
 def handle_download_image():
     # Get the APOD info for the selected date
     sel_date = cal_sel_date.get_date()
-    apod_id = apod_desktop.add_apod_to_cache(# Complete this portion) 
+    apod_id = apod_desktop.add_apod_to_cache(sel_date)
     if apod_id != 0:
         # Update the list of available images
         cbox_sel_image['values'] = apod_desktop.get_all_apod_titles()

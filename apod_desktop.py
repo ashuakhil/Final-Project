@@ -89,6 +89,22 @@ def init_apod_cache():
         os.makedirs(image_cache_dir)
     # Create the DB if it does not already exist
     #Complete this with the correct instructions
+    if not os.path.exists(image_cache_db):
+        db_cxn = sqlite3.connect(image_cache_db)
+        db_cursor = db_cxn.cursor()
+        
+        create_table_query = """
+            CREATE TABLE IF NOT EXISTS image_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                explanation TEXT,
+                file_path TEXT,
+                sha256 TEXT
+            );
+        """
+        db_cursor.execute(create_table_query)
+        db_cxn.commit()
+        db_cxn.close()
     
 
 def add_apod_to_cache(apod_date):
@@ -116,7 +132,12 @@ def add_apod_to_cache(apod_date):
     print("APOD title:", apod_title)
 
     # Download the APOD image
-    apod_image_data, apod_url = apod_api.download_apod_image(apod_info['hdurl'])
+    #apod_image_data, apod_url = apod_api.download_image(apod_info['hdurl'])
+    apod_url = apod_api.get_apod_image_url(apod_info)  # Use this line to get the image URL
+    apod_image_data = image_lib.download_image(apod_url)  # Use this line to download the image data
+    if apod_image_data is None:
+        return 0
+    print("Downloaded APOD image:", apod_url)
 
     # Check whether the APOD already exists in the image cache
     apod_sha256 = hashlib.sha256(apod_image_data).hexdigest()
